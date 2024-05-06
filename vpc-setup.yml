@@ -117,14 +117,14 @@
           - dest: 0.0.0.0/0
             gateway_id: '{{igw_out.gateway_id}}'
       register: pubRt_out
-      #- name: create nat gateway_id
-      # ec2_vpc_nat_gateway:
-      #  state: "{{state}}"
-      # subnet_id: "{{pubsub1_out.subnet.id}}"
-      #wait: yes
-      #region: "{{region}}"
-      #if_exit_do_not_create: true
-      #register: ngw_out
+    - name: create nat gateway_id
+      ec2_vpc_nat_gateway:
+        state: "{{state}}"
+        subnet_id: "{{pubsub1_out.subnet.id}}"
+        wait: yes
+        region: "{{region}}"
+        if_exit_do_not_create: true
+      register: ngw_out
 
     - name: set up private subnet routes
       ec2_vpc_route_table:
