@@ -20,5 +20,5 @@ zone3: ap-south-1c
 state: present
 # bastion host setup
 bastion_ami: ami-013e83f579886baeb
-MYIP: 106.205.157.30/32
+MYIP: 106.205.157.1/32
 #MYIP: 192.168.190.255/32
