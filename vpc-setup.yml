@@ -136,9 +136,9 @@
           - '{{prisub1_out.subnet.id}}'
           - '{{prisub2_out.subnet.id}}'
           - '{{prisub3_out.subnet.id}}'
-          # routes:
-          # - dest: 0.0.0.0/0
-          #  gateway_id: "{{ngw_out.nat_gateway_id}}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ngw_out.nat_gateway_id}}"
       register: priRt_out
 
     - debug:
@@ -152,7 +152,7 @@
         - prisub2_out.subnet.id
         - prisub3_out.subnet.id
         - igw_out.gateway_id
-        #- ngw_out.nat_gateway_id
+        - ngw_out.nat_gateway_id
         - pubRt_out.route_table.id
         - priRt_out.route_table.id
 
@@ -164,23 +164,24 @@
         prisub1id: '{{prisub1_out.subnet.id}}'
         prisub2id: '{{prisub2_out.subnet.id}}'
         prisub3id: '{{prisub3_out.subnet.id}}'
-        igwid: '{{igw_out.gateway_id}}'
-        #   netgwid:    "{{ngw_out.nat_gateway_id}}"
-        pubRTid: '{{pubRt_out.route_table.id}}'
-        priRTid: '{{priRt_out.route_table.id}}'
+        igwid:     '{{igw_out.gateway_id}}'
+        netgwid:   '{{ngw_out.nat_gateway_id}}'
+        pubRTid:   '{{pubRt_out.route_table.id}}'
+        priRTid:   '{{priRt_out.route_table.id}}'
         cacheable: 'yes'
 
     - name: create variable file for vpc output
       copy:
         content: |
           vpcid: {{vpcout.vpc.id}}
-           pubsub1id: {{pubsub1_out.subnet.id}}
+          pubsub1id: {{pubsub1_out.subnet.id}}
           pubsub2id:  {{pubsub2_out.subnet.id}}
           pubsub3id:  {{pubsub3_out.subnet.id}}
           prisub1id: {{prisub1_out.subnet.id}}
           prisub2id: {{prisub2_out.subnet.id}}
           prisub3id: {{prisub3_out.subnet.id}}
           igwid: {{igw_out.gateway_id}}
-            pubRTid: {{pubRt_out.route_table.id}}
-           priRT: {{priRt_out.route_table.id}}
+          netgwid:    {{ngw_out.nat_gateway_id}}
+          pubRTid: {{pubRt_out.route_table.id}}
+          priRT: {{priRt_out.route_table.id}}
         dest: vars/output_vars
