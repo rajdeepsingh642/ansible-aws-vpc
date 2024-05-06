@@ -1,3 +1,4 @@
+---
 - name: set vpc
   hosts: localhost
   gather_facts: false
