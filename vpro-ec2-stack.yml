@@ -22,6 +22,92 @@
        dest: ./loginkey-key.pem
        mode: 0600
      when: vprokey_out.changed 
+  
+  
+   - name: Create  sequrity Group for load blancer
+     ec2_group:
+        name: vproELB-sg
+        description: allow port 80from everwhere and all port within bastion-host-sg
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+     register: vproELBG_out
 
-    
+   - name: Create  sequrity Group for vprofile Stack
+     ec2_group:
+        name: vproStack-sg
+        description: allow port 22from everwhere and all port within bastion-host-sg
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rules: no
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            security_group: "{{vproELBG_out.group_id}}"
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            security_group: "{{bastionsgid}}"
+            vpc_subnet_id: "{{pubsub1id}}"
+        register: vproStackSG_out 
+   - name: update  sequrity Group for its own SG
+     ec2_group:
+        name: vproStack-sg
+        description: allow port 22from everwhere and all port within bastion-host-sg
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rules: no
+        rules:
+          - proto: all
+            security_group:  "{{vproStackSG_out.group_id}}"
 
+
+   - name: Creating Nginx web01
+     amazon.aws.ec2_instance:
+       key_name: "vprokey"
+       region: "{{region}}"
+       instance_type: t2.micro
+       image_id: "{{nginx_ami}}"
+       wait: yes
+
+       tags:
+         Name: "web01"
+         Project: vprofile
+         Owner: devops team
+       count: 1
+       #count_tag:
+        # Name: "bastion_host"
+         #Project: vprofile
+         #Owner: devops team
+      
+       security_group: "{{vproStackSG_out.group_id}}"
+       vpc_subnet_id: "{{prisub1id}}"
+     register: web01_out
+       
+   - name: Creating Tomcat app01
+     amazon.aws.ec2_instance:
+       key_name: "vprokey"
+       region: "{{region}}"
+       instance_type: t2.micro
+       image_id: "{{tomcat_ami}}"
+       wait: yes
+
+       tags:
+         Name: "app01"
+         Project: vprofile
+         Owner: devops team
+       count: 1
+       #count_tag:
+        # Name: "bastion_host"
+         #Project: vprofile
+         #Owner: devops team
+      
+       security_group: "{{vproStackSG_out.group_id}}"
+       vpc_subnet_id: "{{prisub1id}}"
+     register: app01_out
+          

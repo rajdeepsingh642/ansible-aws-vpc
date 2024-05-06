@@ -10,3 +10,4 @@ igwid: igw-0644ca7377f52541f
 netgwid:    nat-09bc6073c4396a868
 pubRTid: rtb-001cfc2bc3408477b
 priRT: rtb-0dcc36078483a0589
+bastionSGid:

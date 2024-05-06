@@ -60,5 +60,12 @@
        vpc_subnet_id: "{{pubsub1id}}"
      register: ec2_out
 
+   - name: insert/update "bastionSGid" in vars file
+     blockinfile:
+        path: vars/vpc-output_vars
+        backup: yes
+        block: |
+          bastionsgid: {{bastionsg_out.group_id}} 
+
       
   
