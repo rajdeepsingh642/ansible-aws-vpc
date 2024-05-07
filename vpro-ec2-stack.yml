@@ -158,7 +158,7 @@
      register: rmq01_out
                                
 
-   - name: Creating RabitMQ rmq01
+   - name: Creating mysql db01
      ec2:
        key_name: "vprokey"
        region: "{{region}}"
