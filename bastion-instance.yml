@@ -39,7 +39,7 @@
 
    - name: creating Bastion host
      
-     amazon.aws.ec2_instance:
+     ec2:
        key_name: "vprofile-key"
        region: "{{region}}"
        instance_type: t2.micro
@@ -50,11 +50,11 @@
          Name: "bastion_host"
          Project: vprofile
          Owner: devops team
-       count: 1
-       #count_tag:
-        # Name: "bastion_host"
-         #Project: vprofile
-         #Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "bastion_host"
+         Project: vprofile
+         Owner: devops team
       
        security_group: "{{bastionsg_out.group_id}}"
        vpc_subnet_id: "{{pubsub1id}}"

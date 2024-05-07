@@ -68,7 +68,7 @@
 
 
    - name: Creating Nginx web01
-     amazon.aws.ec2_instance:
+     ec2:
        key_name: "vprokey"
        region: "{{region}}"
        instance_type: t2.micro
@@ -79,18 +79,18 @@
          Name: "web01"
          Project: vprofile
          Owner: devops team
-       count: 1
-       #count_tag:
-        # Name: "bastion_host"
-         #Project: vprofile
-         #Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "web01"
+         Project: vprofile
+         Owner: devops team
       
        security_group: "{{vproStackSG_out.group_id}}"
        vpc_subnet_id: "{{prisub1id}}"
      register: web01_out
        
    - name: Creating Tomcat app01
-     amazon.aws.ec2_instance:
+     ec2:
        key_name: "vprokey"
        region: "{{region}}"
        instance_type: t2.micro
@@ -101,11 +101,11 @@
          Name: "app01"
          Project: vprofile
          Owner: devops team
-       count: 1
-       #count_tag:
-        # Name: "bastion_host"
-         #Project: vprofile
-         #Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "bastion_host"
+         Project: vprofile
+         Owner: devops team
       
        security_group: "{{vproStackSG_out.group_id}}"
        vpc_subnet_id: "{{prisub1id}}"
