@@ -103,7 +103,7 @@
          Owner: devops team
        exact_count: 1
        count_tag:
-         Name: "bastion_host"
+         Name: "app01"
          Project: vprofile
          Owner: devops team
       
@@ -111,3 +111,74 @@
        vpc_subnet_id: "{{prisub1id}}"
      register: app01_out
           
+
+   - name: Creating memcache mc01
+     ec2:
+       key_name: "vprokey"
+       region: "{{region}}"
+       instance_type: t2.micro
+       image_id: "{{memcache_ami}}"
+       wait: yes
+
+       tags:
+         Name: "mc01"
+         Project: vprofile
+         Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "mc01"
+         Project: vprofile
+         Owner: devops team
+      
+       security_group: "{{vproStackSG_out.group_id}}"
+       vpc_subnet_id: "{{prisub1id}}"
+     register: mc01_out
+                 
+
+   - name: Creating RabitMQ rmq01
+     ec2:
+       key_name: "vprokey"
+       region: "{{region}}"
+       instance_type: t2.micro
+       image_id: "{{rmq_ami}}"
+       wait: yes
+
+       tags:
+         Name: "rmq01"
+         Project: vprofile
+         Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "rmq01"
+         Project: vprofile
+         Owner: devops team
+      
+       security_group: "{{vproStackSG_out.group_id}}"
+       vpc_subnet_id: "{{prisub1id}}"
+     register: rmq01_out
+                               
+
+   - name: Creating RabitMQ rmq01
+     ec2:
+       key_name: "vprokey"
+       region: "{{region}}"
+       instance_type: t2.micro
+       image_id: "{{mysql_ami}}"
+       wait: yes
+
+       tags:
+         Name: "db01"
+         Project: vprofile
+         Owner: devops team
+       exact_count: 1
+       count_tag:
+         Name: "db01"
+         Project: vprofile
+         Owner: devops team
+      
+       security_group: "{{vproStackSG_out.group_id}}"
+       vpc_subnet_id: "{{prisub1id}}"
+     register: db01_out
+   - debug:
+       var: db01_out
+                         
